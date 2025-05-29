@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from app.utils.auth_required import auth_required
+from utils.auth_required import auth_required
 
 alerts_bp = Blueprint("alerts", __name__)
 

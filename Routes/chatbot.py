@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from app.utils.auth_required import auth_required
+from utils.auth_required import auth_required
 
 chatbot_bp = Blueprint("chatbot", __name__)
 
