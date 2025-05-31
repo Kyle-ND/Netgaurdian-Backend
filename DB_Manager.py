@@ -1,4 +1,4 @@
-from supabase import create_client, Client
+from supabase import create_client, Client,SupabaseAuthClient
 from datetime import datetime
 import jwt
 
@@ -10,31 +10,33 @@ db_password = "ymeAQUk8dUlv69n3"
 
 
 def register_user(email, password, name=""):
-    result = supabase.auth.sign_up({
-        "email": email,
-        "password": password
-    })
+    try:
+        result = supabase.auth.sign_up({
+            "email": email,
+            "password": password
+        })
 
-    user = result.user
-    if not user:
-        return {"error": "Registration failed"}, 400
+        user = result.user
+        if not user:
+            return {"error": "Registration failed"}
 
-    supabase.table("users").insert({
-        "id": user.id,
-        "email": email,
-        "name": name,
-        "role": "user"
-    }).execute()
-
-    return {
-        "message": "User registered successfully",
-        "user": {
+        supabase.table("users").insert({
             "id": user.id,
             "email": email,
             "name": name,
             "role": "user"
+        }).execute()
+
+        return {
+            "user": {
+                "id": user.id,
+                "email": email,
+                "name": name,
+                "role": "user"
+            }
         }
-    }
+    except Exception as e:
+        return {"error": "An error occurred during registration: " + str(e)}
 
 
 
@@ -50,7 +52,7 @@ def login_user(email: str, password: str):
         session = result.session
 
         if not user or not session:
-            return {"error": "Invalid credentials"}, 401
+            return {"error": "Invalid credentials"}
 
         # Fetch additional user data from your `users` table (optional)
         user_data = supabase.table("users").select("*").eq("id", user.id).single().execute()
@@ -66,7 +68,7 @@ def login_user(email: str, password: str):
         }
 
     except Exception as e:
-        return {"error": str(e)}, 400
+        return {"error": "An error occurred during login: " + str(e)}
 
 def get_user_by_email(email):
     return supabase.table("users").select("*").eq("email", email).single().execute()
