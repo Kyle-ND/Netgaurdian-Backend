@@ -2,8 +2,6 @@ from functools import wraps
 from flask import request, jsonify, g
 from supabase import create_client
 import os
-import jwt
-import requests
 
 # Set up Supabase client
 SUPABASE_URL = os.getenv("SUPABASE_URL")
