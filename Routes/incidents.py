@@ -1,5 +1,5 @@
-from flask import Blueprint, request
-from utils.auth_required import auth_required
+from flask import Blueprint
+from Utils.auth_required import auth_required
 
 incidents_bp = Blueprint("incidents", __name__)
 

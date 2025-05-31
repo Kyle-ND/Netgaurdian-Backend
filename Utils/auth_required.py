@@ -2,11 +2,13 @@ from functools import wraps
 from flask import request, jsonify, g
 from supabase import create_client
 import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Load environment variables from .env file
 
 # Set up Supabase client
 SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-JWT_SECRET = os.getenv("SUPABASE_JWT_SECRET")  # Only if you're verifying manually
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")  # Only if you're verifying manually
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 

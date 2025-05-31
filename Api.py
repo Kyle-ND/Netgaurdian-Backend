@@ -4,6 +4,7 @@ from Routes.users import users_bp
 from Routes.incidents import incidents_bp
 from Routes.alerts import alerts_bp
 from Routes.chatbot import chatbot_bp
+from Routes.scan import scan_bp
 from flask_cors import CORS
 
 
@@ -17,6 +18,7 @@ def create_app():
     app.register_blueprint(incidents_bp, url_prefix='/incidents')
     app.register_blueprint(alerts_bp, url_prefix='/alerts')
     app.register_blueprint(chatbot_bp, url_prefix='/chatbot')
+    app.register_blueprint(scan_bp, url_prefix='/scan')
 
     return app
 
