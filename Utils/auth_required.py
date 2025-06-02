@@ -4,6 +4,9 @@ from supabase import create_client
 import os
 import jwt
 import requests
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 
 # Set up Supabase client
 SUPABASE_URL = os.getenv("SUPABASE_URL")

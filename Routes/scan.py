@@ -1,7 +1,10 @@
 from flask import Blueprint, request, jsonify
 from utils.auth_required import auth_required
+from email_scanner import scan_inbox
+
 
 scan_bp = Blueprint("scan", __name__)
+
 
 @scan_bp.route("/email", methods=["POST"])
 @auth_required
@@ -20,3 +23,8 @@ def scan_wifi():
 def scan_shodan():
     # TODO: Extract IP and call shodan_scan()
     return jsonify({"message": "Shodan scan started"}), 200
+
+@scan_bp.route("/emails", methods=["GET"])
+def scan_emails():
+    flagged_emails = scan_inbox()
+    return jsonify({"flagged_emails": flagged_emails})
