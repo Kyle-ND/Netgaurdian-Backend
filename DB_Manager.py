@@ -94,7 +94,7 @@ def get_all_users():
     ]
 
 def log_incident(user_id, incident_type, description, source, severity, timestamp=None):
-    return supabase.table("incidents").insert({
+    data = supabase.table("incidents").insert({
         "user_id": user_id,
         "type": incident_type,
         "description": description,
@@ -102,6 +102,18 @@ def log_incident(user_id, incident_type, description, source, severity, timestam
         "severity": severity,
         "detected_at": timestamp or datetime.utcnow()
     }).execute()
+
+    populate_single_incident(
+        supabase_client=supabase,
+        incident_type=incident_type,
+        description=description,
+        source=source,
+        severity=severity,
+        incident_id=data.data[0].get("id"),  # Use the ID from the inserted data
+        detected_at=timestamp or datetime.utcnow(),
+        resolved=False  # Default to unresolved
+    )
+    return data
 
 def get_user_incidents(user_id):
     return supabase.table("incidents").select("*").eq("user_id", user_id).order("detected_at", desc=True).execute()
@@ -113,7 +125,72 @@ def delete_incident(incident_id):
     return supabase.table("incidents").delete().eq("id", incident_id).execute()
 
 def get_all_incidents():
-    return supabase.table("incidents").select("*").order("detected_at", desc=True).execute()
+    return supabase.table("admin_incidents").select("*").order("detected_at", desc=True).execute()
+
+def populate_single_incident(
+    supabase_client: Client,
+    incident_type: str,
+    description: str,
+    source: str,
+    severity: int,
+    incident_id, # Optional: User can provide an ID
+    detected_at: datetime = None,  # Optional: defaults to current UTC time if None
+    resolved: bool = False,        # Optional: defaults to False
+    updated_at: datetime = None    # Optional: only set if you want to override default/trigger
+):
+    """
+    Populates a single row in the 'admin_incidents' table in Supabase.
+    Allows specifying an incident_id. If None, Supabase will generate it.
+
+    Args:
+        supabase_client: An initialized Supabase client instance.
+        incident_type: The type or category of the incident.
+        description: Detailed description of the incident.
+        source: Where or how the incident was detected.
+        severity: Numerical representation of the incident's severity.
+        incident_id: Optional UUID for the incident.
+        detected_at: Timestamp of when the incident was detected. Defaults to now (UTC).
+        resolved: Boolean flag indicating if the incident is resolved. Defaults to False.
+        updated_at: Timestamp of when the record was last updated. Defaults to None (Supabase trigger will handle).
+    """
+
+
+    if detected_at is None:
+        detected_at = datetime.now(timezone.utc)
+
+    incident_data = {
+        'incident_id': incident_id,  # This will be None if not provided, allowing Supabase to auto-generate
+        'type': incident_type,
+        'description': description,
+        'source': source,
+        'severity': severity,
+        'detected_at': detected_at.isoformat(), # Convert datetime to ISO 8601 string
+        'resolved': resolved,
+    }
+
+
+    if updated_at:
+        incident_data['updated_at'] = updated_at.isoformat()
+
+    try:
+        print(f"Attempting to insert a single incident: {incident_type} (ID: {incident_id or 'Auto-generated'})...")
+        data, error = supabase_client.table('admin_incidents').insert(incident_data).execute()
+
+        if error and error.message:
+            print(f"Error inserting data: {error.message}")
+            if hasattr(error, 'details'): print(f"Details: {error.details}")
+            if hasattr(error, 'hint'): print(f"Hint: {error.hint}")
+        elif data and len(data[1]) > 0:
+            inserted_id = data[1][0].get('incident_id', 'N/A')
+            print(f"Successfully inserted incident. ID: {inserted_id}")
+            # print("Inserted data:", data[1]) # Uncomment to see the inserted record
+        else:
+            print("Insertion completed, but response format was unexpected or no error message provided.")
+            print("Full response data:", data)
+            print("Full error object:", error)
+
+    except Exception as e:
+        print(f"An unexpected error occurred during data insertion: {e}")
 
 def add_recommendation(user_id, incident_id, message):
     return supabase.table("recommendations").insert({
