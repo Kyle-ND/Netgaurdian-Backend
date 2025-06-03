@@ -8,7 +8,7 @@ incidents_bp = Blueprint("incidents", __name__)
 @auth_required
 def get_user_incides():
     user = g.user
-    # print(user)
+   
     if not user:
         print("here")
         return jsonify({"error": "Unauthorized"}), 401
