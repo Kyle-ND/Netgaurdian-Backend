@@ -144,3 +144,13 @@ def decode_token(jwt_token, secret_key):
         return {"error": "Token expired"}, 401
     except jwt.InvalidTokenError:
         return {"error": "Invalid token"}, 401
+    
+
+def map_severity(level: int) -> str:
+    if level == 1:
+        return "low"
+    elif level in (2, 3):
+        return "medium"
+    elif level in (4, 5):
+        return "high"
+    return "unknown"
