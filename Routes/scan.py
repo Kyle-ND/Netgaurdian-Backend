@@ -1,17 +1,23 @@
 from flask import Blueprint, jsonify, request
 from Utils.auth_required import auth_required
 from url_check import check_link
+from email_check import check_email_breaches
 
 scan_bp = Blueprint("scan", __name__)
 
 @scan_bp.route("/email", methods=["POST"])
-# @auth_required
+@auth_required
 def scan_email():
-    # TODO: Extract provider, credentials and trigger scan
-    return jsonify({"message": "Email scan initiated", "status": "in_progress"}), 200
+    email = request.args.get("email") if request.method == 'GET' else request.json.get("email")
+
+    if not email:
+        return jsonify({"error": "email is required"}), 400
+    else:
+        data, status = check_email_breaches(email)
+        return jsonify(data), status
 
 @scan_bp.route("/link-check", methods=["GET","POST"])
-# @auth_required
+@auth_required
 def scan_link():
     url = request.args.get("url") if request.method == 'GET' else request.json.get("url")
 
