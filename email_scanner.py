@@ -1,13 +1,15 @@
-#the name of this file is emal_scanner.py its using scan_bp which has already bean used rename it and tell me where else to rename it
-
 import os
 import imaplib
 import email
+import json
 import requests
 from flask import Blueprint, g, jsonify
 from email.header import decode_header
+from datetime import datetime
 from dotenv import load_dotenv
 from Utils.auth_required import auth_required
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import torch
 
 load_dotenv()
 
@@ -98,6 +100,77 @@ def detect_spam(msg):
     return None
 
 
+def save_to_file(data, file_path="flagged_spam.json"):
+    timestamped_data = {
+        "timestamp": datetime.now().isoformat(),
+        "data": data
+    }
+    try:
+        if not os.path.exists(file_path):
+            with open(file_path, "w") as f:
+                json.dump([timestamped_data], f, indent=4)
+        else:
+            with open(file_path, "r+", encoding="utf-8") as f:
+                existing = json.load(f)
+                existing.append(timestamped_data)
+                f.seek(0)
+                json.dump(existing, f, indent=4)
+    except Exception as e:
+        print(f"Failed to write to {file_path}: {e}")
+
+
+tokenizer = AutoTokenizer.from_pretrained("cybersectony/phishing-email-detection-distilbert_v2.4.1")
+model = AutoModelForSequenceClassification.from_pretrained("cybersectony/phishing-email-detection-distilbert_v2.4.1")
+
+def detect_phishing(msg):
+    subject = decode_mime_words(msg.get("Subject", ""))
+    from_ = decode_mime_words(msg.get("From", ""))
+
+    body = ""
+    if msg.is_multipart():
+        for part in msg.walk():
+            if part.get_content_type() == "text/plain":
+                payload = part.get_payload(decode=True)
+                if payload:
+                    body = payload.decode(errors='ignore')
+                    break
+    else:
+        payload = msg.get_payload(decode=True)
+        if payload:
+            body = payload.decode(errors='ignore')
+
+    combined_text = f"{subject}\n{body}"
+
+    try:
+        # Tokenize and predict
+        inputs = tokenizer(combined_text, return_tensors="pt", truncation=True, max_length=512)
+        with torch.no_grad():
+            outputs = model(**inputs)
+            predictions = torch.nn.functional.softmax(outputs.logits, dim=-1)
+        probs = predictions[0].tolist()
+
+        # Map index to class labels
+        labels = {
+            "legitimate_email": probs[0],
+            "phishing_url": probs[1],
+            "legitimate_url": probs[2],
+            "phishing_url_alt": probs[3]
+        }
+
+        prediction, confidence = max(labels.items(), key=lambda x: x[1])
+
+        if "phishing" in prediction:
+            return {
+                "from": from_,
+                "subject": subject,
+                "flags": [f"PHISHING: {prediction.replace('_', ' ')} ({confidence:.2%} confidence)"]
+            }
+    except Exception as e:
+        print(f"Error with phishing detection model: {e}")
+
+    return None
+
+
 def scan_inbox(email_user, email_pass):
     mail = connect_to_email(email_user, email_pass)
     if not mail:
@@ -107,9 +180,16 @@ def scan_inbox(email_user, email_pass):
     flagged = []
 
     for msg in msgs:
-        result = detect_spam(msg)
-        if result:
-            flagged.append(result)
+        spam_result = detect_spam(msg)
+        if spam_result:
+            flagged.append(spam_result)
+            save_to_file(spam_result)
+
+        phishing_result = detect_phishing(msg)
+        if phishing_result:
+            flagged.append(phishing_result)
+            save_to_file(phishing_result)
+
 
     mail.logout()
     return flagged

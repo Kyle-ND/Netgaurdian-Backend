@@ -1,0 +1,172 @@
+[
+    {
+        "timestamp": "2025-06-03T21:10:46.114322",
+        "data": {
+            "from": "LinkedIn <messages-noreply@linkedin.com>",
+            "subject": "Varlene, follow Kabelo M. - Talent Acquisition Specialist at Absa\r\n Group",
+            "flags": [
+                "PHISHING: phishing url (99.97% confidence)"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-06-03T21:10:51.012853",
+        "data": {
+            "from": "Google <no-reply@accounts.google.com>",
+            "subject": "Security alert",
+            "flags": [
+                "PHISHING: phishing url (99.95% confidence)"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-06-03T21:10:52.058169",
+        "data": {
+            "from": "LinkedIn <messages-noreply@linkedin.com>",
+            "subject": "Varlene, follow Kabelo M. - Talent Acquisition Specialist at Absa\r\n Group",
+            "flags": [
+                "PHISHING: phishing url (99.97% confidence)"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-06-03T21:10:53.990077",
+        "data": {
+            "from": "\"Woolworths South Africa\" <info@mailwoolworths.co.za>",
+            "subject": "25% off Fashion, Beauty & Home - just for you",
+            "flags": [
+                "PHISHING: phishing url (100.00% confidence)"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-06-03T21:10:55.940811",
+        "data": {
+            "from": "Google <no-reply@accounts.google.com>",
+            "subject": "Security alert",
+            "flags": [
+                "PHISHING: phishing url (99.95% confidence)"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-06-03T21:10:58.510530",
+        "data": {
+            "from": "LinkedIn <notifications-noreply@linkedin.com>",
+            "subject": "Varlene, your posts got 67 impressions last week",
+            "flags": [
+                "PHISHING: phishing url (99.97% confidence)"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-06-03T21:10:58.642932",
+        "data": {
+            "from": "\"Woolworths South Africa\" <info@mailwoolworths.co.za>",
+            "subject": "25% off Fashion, Beauty & Home - just for you",
+            "flags": [
+                "AISPAMCHECK: Detected as spam"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-06-03T21:10:59.124319",
+        "data": {
+            "from": "\"Woolworths South Africa\" <info@mailwoolworths.co.za>",
+            "subject": "25% off Fashion, Beauty & Home - just for you",
+            "flags": [
+                "PHISHING: phishing url (100.00% confidence)"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-06-03T21:11:01.752684",
+        "data": {
+            "from": "LinkedIn <messages-noreply@linkedin.com>",
+            "subject": "\ud83d\udcbc Your connection, Bukhosibezulu, just started a new job! Check in with them and 2 others",
+            "flags": [
+                "PHISHING: phishing url (100.00% confidence)"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-06-03T21:11:05.170573",
+        "data": {
+            "from": "LinkedIn <notifications-noreply@linkedin.com>",
+            "subject": "Varlene, your posts got 67 impressions last week",
+            "flags": [
+                "PHISHING: phishing url (99.97% confidence)"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-06-03T21:11:05.238912",
+        "data": {
+            "from": "LinkedIn <notifications-noreply@linkedin.com>",
+            "subject": "You have 1 new invitation",
+            "flags": [
+                "PHISHING: phishing url (100.00% confidence)"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-06-03T21:11:07.744606",
+        "data": {
+            "from": "LinkedIn <messages-noreply@linkedin.com>",
+            "subject": "\ud83d\udcbc Your connection, Bukhosibezulu, just started a new job! Check in with them and 2 others",
+            "flags": [
+                "PHISHING: phishing url (100.00% confidence)"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-06-03T21:11:07.756182",
+        "data": {
+            "from": "\"Shutterstock\" <shutterstock@emktng.shutterstock.com>",
+            "subject": "Ready for download: This week\u2019s free images",
+            "flags": [
+                "PHISHING: phishing url (99.96% confidence)"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-06-03T21:11:10.566493",
+        "data": {
+            "from": "LinkedIn <messages-noreply@linkedin.com>",
+            "subject": "Varlene, add Sylivia Bebwa - IIE MSA VOICE SRC Golden key Society\r\n Chairperson",
+            "flags": [
+                "PHISHING: phishing url (100.00% confidence)"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-06-03T21:11:11.213736",
+        "data": {
+            "from": "LinkedIn <notifications-noreply@linkedin.com>",
+            "subject": "You have 1 new invitation",
+            "flags": [
+                "PHISHING: phishing url (100.00% confidence)"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-06-03T21:11:14.167762",
+        "data": {
+            "from": "\"Shutterstock\" <shutterstock@emktng.shutterstock.com>",
+            "subject": "Ready for download: This week\u2019s free images",
+            "flags": [
+                "PHISHING: phishing url (99.96% confidence)"
+            ]
+        }
+    },
+    {
+        "timestamp": "2025-06-03T21:11:16.096840",
+        "data": {
+            "from": "LinkedIn <messages-noreply@linkedin.com>",
+            "subject": "Varlene, add Sylivia Bebwa - IIE MSA VOICE SRC Golden key Society\r\n Chairperson",
+            "flags": [
+                "PHISHING: phishing url (100.00% confidence)"
+            ]
+        }
+    }
+]
