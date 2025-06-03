@@ -6,7 +6,7 @@ from Routes.alerts import alerts_bp
 from Routes.chatbot import chatbot_bp
 from Routes.scan import scan_bp
 from flask_cors import CORS
-from background_runner import start_background_scan
+# from background_runner import start_background_scan66
 from email_scanner import email_scan_bp
 
 
@@ -15,7 +15,6 @@ def create_app():
     app = Flask(__name__)
     CORS(app)
 
-    start_background_scan()
 
     
     app.register_blueprint(auth_bp, url_prefix='/auth')

@@ -18,7 +18,7 @@ def check_email_breaches(email):
                 log_incident(g.user["id"], "email breach", description, source["name"], 5, date)
                 print("logged:", source)
             except Exception as e:
-                continue
+                print(f"Failed to log incident for source {source['name']}: {str(e)}")
         return {"breaches found": result["found"]}, 200
     
     

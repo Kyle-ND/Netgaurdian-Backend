@@ -94,7 +94,8 @@ def get_all_users():
     ]
 
 def log_incident(user_id, incident_type, description, source, severity, timestamp=None):
-    data = supabase.table("incidents").insert({
+    print("Logging incident:")
+    inserted = supabase.table("incidents").insert({
         "user_id": user_id,
         "type": incident_type,
         "description": description,
@@ -102,20 +103,23 @@ def log_incident(user_id, incident_type, description, source, severity, timestam
         "severity": severity,
         "detected_at": timestamp or datetime.utcnow()
     }).execute()
+    print(inserted.data[0])
 
-    
-    
     populate_single_incident(
         supabase_client=supabase,
         incident_type=incident_type,
         description=description,
         source=source,
         severity=severity,
-        incident_id=str(data.data[0].get("id")),  # Use the ID from the inserted data
-        detected_at=timestamp or datetime.utcnow(),
-        resolved=False  # Default to unresolved
+        incident_id=inserted.data[0].get("id"),  # Let Supabase generate the ID
+        detected_at=timestamp or datetime.now(),  # Use current UTC time if not provided
+        resolved=False,  # Default to unresolved
+        updated_at=None  # Let Supabase handle the updated_at timestamp
     )
-    return data
+
+
+    
+
 
 def get_user_incidents(user_id):
     return supabase.table("incidents").select("*").eq("user_id", user_id).order("detected_at", desc=True).execute()
@@ -162,8 +166,9 @@ def populate_single_incident(
         'description': description,
         'source': source,
         'severity': severity,
-        'detected_at': detected_at.isoformat(), # Convert datetime to ISO 8601 string
+        'detected_at': detected_at, # Convert datetime to ISO 8601 string
         'resolved': resolved,
+
     }
 
     try:

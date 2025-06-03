@@ -23,11 +23,11 @@ def auth_required(f):
         token = auth_header.replace("Bearer ", "")
 
         try:
-            print("Verifying token:", token)  # Debugging line
+            # print("Verifying token:", token)  # Debugging line
             user = supabase.auth.get_user(token)
             if not user or not user.user:
                 return jsonify({"error": "Invalid or expired token"}), 401
-            print("User authenticated:", user.user.id)  # Debugging line
+            # print("User authenticated:", user.user.id)  # Debugging line
             user_data = supabase.table("users").select("*").eq("id", user.user.id).single().execute()
             print("User data fetched:", user_data.data)  # Debugging line
             g.user = user_data.data
