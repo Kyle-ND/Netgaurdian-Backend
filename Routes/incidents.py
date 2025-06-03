@@ -12,10 +12,14 @@ def get_user_incident():
     user = g.user
     if not user:
         return jsonify({"error": "Unauthorized"}), 401
-    
-    incidents = get_user_incidents(user["id"]).data
+    if user["role"] != "admin":
+        
+        incidents = get_user_incidents(user["id"]).data
 
-    return {"incidents": incidents}, 200
+        return {"incidents": incidents}, 200
+    else:
+        incidents = get_all_incidents().data
+        return {"incidents": incidents}, 200
     
 
 @incidents_bp.route("/resolve/<incident_id>", methods=["PUT"])

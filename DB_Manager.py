@@ -103,13 +103,15 @@ def log_incident(user_id, incident_type, description, source, severity, timestam
         "detected_at": timestamp or datetime.utcnow()
     }).execute()
 
+    
+    
     populate_single_incident(
         supabase_client=supabase,
         incident_type=incident_type,
         description=description,
         source=source,
         severity=severity,
-        incident_id=data.data[0].get("id"),  # Use the ID from the inserted data
+        incident_id=str(data.data[0].get("id")),  # Use the ID from the inserted data
         detected_at=timestamp or datetime.utcnow(),
         resolved=False  # Default to unresolved
     )
@@ -134,9 +136,9 @@ def populate_single_incident(
     source: str,
     severity: int,
     incident_id, # Optional: User can provide an ID
-    detected_at: datetime = None,  # Optional: defaults to current UTC time if None
-    resolved: bool = False,        # Optional: defaults to False
-    updated_at: datetime = None    # Optional: only set if you want to override default/trigger
+    detected_at,  # Optional: defaults to current UTC time if None
+    resolved,   # Optional: defaults to False
+    updated_at,    # Optional: only set if you want to override default/trigger
 ):
     """
     Populates a single row in the 'admin_incidents' table in Supabase.
@@ -154,10 +156,6 @@ def populate_single_incident(
         updated_at: Timestamp of when the record was last updated. Defaults to None (Supabase trigger will handle).
     """
 
-
-    if detected_at is None:
-        detected_at = datetime.now(timezone.utc)
-
     incident_data = {
         'incident_id': incident_id,  # This will be None if not provided, allowing Supabase to auto-generate
         'type': incident_type,
@@ -167,10 +165,6 @@ def populate_single_incident(
         'detected_at': detected_at.isoformat(), # Convert datetime to ISO 8601 string
         'resolved': resolved,
     }
-
-
-    if updated_at:
-        incident_data['updated_at'] = updated_at.isoformat()
 
     try:
         print(f"Attempting to insert a single incident: {incident_type} (ID: {incident_id or 'Auto-generated'})...")
@@ -189,8 +183,10 @@ def populate_single_incident(
             print("Full response data:", data)
             print("Full error object:", error)
 
+    except AttributeError as e:
+        print("added incident")
     except Exception as e:
-        print(f"An unexpected error occurred during data insertion: {e}")
+        print(f"An unexpected error occurred: {str(e)}")
 
 def add_recommendation(user_id, incident_id, message):
     return supabase.table("recommendations").insert({
