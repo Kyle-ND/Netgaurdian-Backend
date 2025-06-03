@@ -6,11 +6,16 @@ from Routes.alerts import alerts_bp
 from Routes.chatbot import chatbot_bp
 from Routes.scan import scan_bp
 from flask_cors import CORS
+from background_runner import start_background_scan
+from email_scanner import email_scan_bp
+
 
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
+
+    start_background_scan()
 
     
     app.register_blueprint(auth_bp, url_prefix='/auth')
@@ -19,6 +24,10 @@ def create_app():
     app.register_blueprint(alerts_bp, url_prefix='/alerts')
     app.register_blueprint(chatbot_bp, url_prefix='/chatbot')
     app.register_blueprint(scan_bp, url_prefix='/scan')
+    app.register_blueprint(email_scan_bp, url_prefix="/email")
+
+
+    
 
     return app
 
