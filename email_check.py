@@ -12,14 +12,14 @@ def check_email_breaches(email):
         sources = result["sources"]
         for source in sources:
             try:
-                
-                description = f"Your email has been exposed to '{source["name"]}' on f{source["date"]}"
+
+                description = f"Your email [{email}] has been exposed to '{source["name"]}' on {source["date"]}"
                 date = str(datetime.datetime.now())
                 log_incident(g.user["id"], "email breach", description, source["name"], 5, date)
-
+                print("logged:", source)
             except Exception as e:
-                return {"failed to log incident": f"{str(e)}"}, 500
-        return {"breaches found": result['found']}, 200
+                continue
+        return {"breaches found": result["found"]}, 200
     
     
     except Exception as e:
