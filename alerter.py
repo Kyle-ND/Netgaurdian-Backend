@@ -32,7 +32,7 @@ def send_open_sms(device):
         client = Client(os.environ['TWILIO_ACCOUNT_SID'], os.environ['TWILIO_AUTH_TOKEN'])
         message = client.messages.create(
         from_='whatsapp:+14155238886',  # Twilio WhatsApp sandbox number
-        to='whatsapp:+27624607085',
+        to='whatsapp: +27625059440',
         body=(
             f"A device on your network has an open port?{str(device)}\n"
             "please resolve this as soon as possible."

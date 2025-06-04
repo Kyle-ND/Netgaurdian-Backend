@@ -4,7 +4,7 @@ import os
 import imaplib
 import email
 import requests
-from flask import Blueprint, g, jsonify
+from flask import Blueprint, g, jsonify, request
 from email.header import decode_header
 from dotenv import load_dotenv
 from Utils.auth_required import auth_required
@@ -13,7 +13,7 @@ load_dotenv()
 
 AISPAMCHECK_API_KEY = os.getenv("AISPAMCHECK_API_KEY")
 
-email_scan_bp = Blueprint("email_scan_bp", __name__)
+email_scan_bp = Blueprint("email_scan", __name__)
 
 
 def connect_to_email(email_user, email_pass):
@@ -121,9 +121,11 @@ def scan_emails_route():
     auth_user = g.user
     if not auth_user:
         return jsonify({"error": "Unauthorized"}), 401
-
-    email_user = auth_user.get("email")
-    email_pass = auth_user.get("email_pass")
+    request_data = request.get_json()
+    email_user = request_data.get("email")
+    email_pass = request_data.get("email_pass")
+    print(f"Scanning emails for user: {email_user}")
+    print(email_pass)
 
     if not email_user or not email_pass:
         return jsonify({"error": "Missing email credentials"}), 400

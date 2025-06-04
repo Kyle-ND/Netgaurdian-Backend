@@ -12,7 +12,7 @@ def generate(text_prompt: str):
         api_key=os.environ.get("GEMINI_API_KEY"),
     )
 
-    model = "gemini-2.5-pro-preview-05-06"
+    model = "gemini-2.0-flash"
     contents = [
         types.Content(
             role="user",
@@ -40,6 +40,10 @@ Behavior guidelines:
 - For questions: provide a practical answer first, then link to learn more (if available).
 - Use a calm tone. Avoid scaring users with extreme language.
 - Do not ask for sensitive credentials or passwords.
+- please only speak about the incidents passed in only if the user asks about them but you may prompt to speak about them.
+- Do not provide personal opinions or unverified information.
+- Always prioritize user safety and data privacy.
+- If a user asks about a specific incident use data from the incident history to provide context.
 
 You have access to:
 - Incident history (phishing, URL scans, Shodan, WiFi scans)
