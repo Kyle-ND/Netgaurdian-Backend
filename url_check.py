@@ -16,6 +16,7 @@ def check_link(url):
         virustotal_url = "https://www.virustotal.com/api/v3/urls"
         headers = {"x-apikey": VIRUSTOTAL_API_KEY}
         scan_result = requests.post(virustotal_url, headers=headers, data={"url": url})
+        print(scan_result.text)
 
         if scan_result.status_code != 200:
             return {"error": "Failed to initiate scan", "details": scan_result.text}, 502
