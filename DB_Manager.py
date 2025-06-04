@@ -101,7 +101,7 @@ def log_incident(user_id, incident_type, description, source, severity, timestam
         "description": description,
         "source": source,
         "severity": severity,
-        "detected_at": timestamp or datetime.utcnow()
+        "detected_at": timestamp,
     }).execute()
     print(inserted.data[0])
 
@@ -112,7 +112,7 @@ def log_incident(user_id, incident_type, description, source, severity, timestam
         source=source,
         severity=severity,
         incident_id=inserted.data[0].get("id"),  # Let Supabase generate the ID
-        detected_at=timestamp or datetime.now(),  # Use current UTC time if not provided
+        detected_at=str(datetime.now()),  # Use current UTC time if not provided
         resolved=False,  # Default to unresolved
         updated_at=None  # Let Supabase handle the updated_at timestamp
     )

@@ -34,7 +34,7 @@ def send_open_sms(device):
         from_='whatsapp:+14155238886',  # Twilio WhatsApp sandbox number
         to='whatsapp:+27624607085',
         body=(
-            f"A device on your network has an open port?{device}\n"
+            f"A device on your network has an open port?{str(device)}\n"
             "please resolve this as soon as possible."
         )
     )

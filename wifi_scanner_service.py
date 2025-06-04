@@ -72,12 +72,23 @@ def local_wifi_scan(user):
                 'MAC': mac
             }
             ports = scan_ports(ip)
-            devices_info['Open Ports'] = ports
+            devices_info['Open Ports'] = tuple(ports)
             if not initiAL_scan:
-                if ports not in [None, [], '']:
+                if ports != []:
+                    print(f"  Open ports: {ports if ports else 'None'}\n")
                     send_open_sms(devices_info)
-                    log_incident(user['id'], "open port detected", f"Device {devices_info['IP']} with MAC {devices_info['MAC']} has open ports", devices_info['IP'], 2, str(devices_info['Open Ports']))
-                    
+                    print("message sent to user")
+                    try:
+                        log_incident
+                        (user['id'],
+                        "open port detected",
+                        f"Device {devices_info['IP']} with MAC {devices_info['MAC']} has open ports {str(devices_info['Open Ports'])}",
+                          devices_info['IP'],
+                            2,
+                            )
+                        
+                    except Exception as e:
+                        print(f"Failed to log incident: {e}")
                 remebered_devices.add(tuple(devices_info.items()))
                 print(f"  Open ports: {ports if ports else 'None'}\n")
                 initiAL_scan = True
@@ -85,7 +96,12 @@ def local_wifi_scan(user):
                 if tuple(devices_info.items()) not in remebered_devices:
                     print(f"    New device detected: {devices_info['IP']} | Open ports: {ports if ports else 'None'}\n")
                     send_multichoice_sms(devices_info)
-                    log_incident(user['id'], "new device detected", f"New device {devices_info['IP']} with MAC {devices_info['MAC']} detected", devices_info['IP'], 1, str(devices_info['Open Ports']))
+                    log_incident(user['id'],
+                                  "new device detected",
+                                    f"New device {devices_info['IP']} with MAC {devices_info['MAC']} detected {str(devices_info['Open Ports'])}",
+                                      devices_info['IP'],
+                                        1,
+                                          )
                 else:
                     print(f"Device already known: {devices_info['IP']} | Open ports: {ports if ports else 'None'}\n")
         print("🔄 Rescanning in 10 seconds...")

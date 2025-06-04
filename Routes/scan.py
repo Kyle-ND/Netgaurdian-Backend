@@ -3,9 +3,8 @@ from Utils.auth_required import auth_required
 from url_check import check_link
 from email_check import check_email_breaches
 from wifi_scanner_service import local_wifi_scan
-
 import threading
-import uuid
+
 scan_bp = Blueprint("scan", __name__)
 
 @scan_bp.route("/email", methods=["POST"])
@@ -27,11 +26,12 @@ def scan_wifi():
     return jsonify({"message": "WiFi scan started", "status": "in_progress"}), 200
 
 
-@scan_bp.route("/extension-scan", methods=["POST"])
-# @auth_required
+@scan_bp.route("/extension", methods=["POST"])
 def scan_extension():
     request_data = request.get_json()
     if not request_data or "url" not in request_data:
         return jsonify({"error": "URL is required"}), 400
-    check_link = request_data.get("url")
-    return check_link
+    check_link_data = request_data.get("url")
+    check = check_link(check_link_data)
+    print(f"Received URL for scan: {check_link_data}")
+    return check
